@@ -8,6 +8,7 @@ const geist = Geist({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ONE MILLION DEGENS",
   description: "1,000,000 degens on Robinhood Chain. Mint by burning DEGEN. Supply only goes down.",
+  icons: { icon: "/degen_7.png", apple: "/degen_7.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
