@@ -37,7 +37,7 @@ export default function Page() {
   const displayAddress = mounted ? address : undefined;
   const [heroIdx, setHeroIdx] = useState(0);
   const [qty, setQty] = useState(1);
-  const [pay, setPay] = useState<"eth" | "token">("eth");
+  const [pay, setPay] = useState<"eth" | "token">("token");
   const [msg, setMsg] = useState("");
   const { writeContractAsync } = useWriteContract();
   const { switchChainAsync } = useSwitchChain();
@@ -175,8 +175,8 @@ export default function Page() {
               </div>
 
               <div className="pay-row">
-                <button className={"pay-btn" + (pay === "eth" ? " on" : "")} onClick={() => setPay("eth")}>PAY ETH</button>
                 <button className={"pay-btn" + (pay === "token" ? " on" : "")} onClick={() => setPay("token")}>PAY $DEGEN</button>
+                <button className={"pay-btn" + (pay === "eth" ? " on" : "")} onClick={() => setPay("eth")}>PAY ETH</button>
               </div>
 
               <div className="total">{total}<small>TOTAL · ONE TX · ALL AT ONCE</small></div>
