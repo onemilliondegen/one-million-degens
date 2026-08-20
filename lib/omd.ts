@@ -9,6 +9,9 @@ export const CHAIN = {
 // One Million Degens — deployed on Robinhood Chain.
 export const OMD_ADDR = "0x0fE635f441829B7BfA5D2B3a44344caAe367d38F";
 
+// $DEGEN token — deployed by owner.
+export const DEGEN_ADDR = "0x9e76886e9e6BCc808472151Cb99F9919e237997f";
+
 export const OMD_ABI = [
   { inputs: [], name: "mintPrice", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "tokenPrice", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },

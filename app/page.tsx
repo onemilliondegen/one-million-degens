@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useOmd } from "../lib/useOmd";
-import { OMD_ADDR, OMD_ABI, LIVE } from "../lib/omd";
+import { OMD_ADDR, DEGEN_ADDR, OMD_ABI, ERC20_ABI, LIVE } from "../lib/omd";
 import { useWriteContract, useSwitchChain } from "wagmi";
 import { parseEther, formatUnits } from "viem";
 
@@ -31,7 +31,7 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, minted, burned, mintPrice } = useOmd();
+  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
@@ -55,9 +55,10 @@ export default function Page() {
   const mintedNum = minted !== undefined ? Number(minted) : 0;
   const maxQty = Math.min(MAX_TX, SUPPLY - mintedNum);
   const priceEth = mintPrice !== undefined ? Number(formatUnits(mintPrice as bigint, 18)) : 0;
+  const tokenPriceNum = tokenPrice !== undefined ? Number(formatUnits(tokenPrice as bigint, 18)) : Number(PRICE_TOKEN);
   const total = pay === "eth"
     ? (priceEth > 0 ? (priceEth * qty).toFixed(5) + " ETH" : "FREE")
-    : (Number(PRICE_TOKEN) * qty).toLocaleString("en-US") + " $DEGEN";
+    : (tokenPriceNum * qty).toLocaleString("en-US") + " $DEGEN";
 
   const doConnect = async () => {
     try {
@@ -77,6 +78,12 @@ export default function Page() {
         await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mint", args: [BigInt(qty)], value: parseEther((priceEth * qty).toString()) });
         setMsg("MINTED " + qty + " DEGENS. WELCOME TO THE GREEN.");
       } else {
+        const need = (tokenPrice as bigint ?? 0n) * BigInt(qty);
+        if ((allow as bigint ?? 0n) < need) {
+          setMsg("APPROVING $DEGEN...");
+          await writeContractAsync({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [OMD_ADDR as `0x${string}`, 2n ** 256n - 1n] });
+          setMsg("APPROVED. MINTING...");
+        }
         await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintWithToken", args: [BigInt(qty)] });
         setMsg(qty + " DEGENS MINTED. TOKENS BURNED.");
       }
