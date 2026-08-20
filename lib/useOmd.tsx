@@ -31,7 +31,7 @@ export function useOmd() {
   const { data: minted } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "minted", query: { enabled: true, refetchInterval: 8000 } });
   const { data: burned } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "totalBurned", query: { enabled: true, refetchInterval: 8000 } });
   const { data: burnedLegacy } = useReadContract({ address: LEGACY_OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "totalBurned", query: { enabled: true, refetchInterval: 8000 } });
-  const totalBurned = (burned ?? 0n) + (burnedLegacy ?? 0n);
+  const totalBurned = (burned ?? BigInt(0)) + (burnedLegacy ?? BigInt(0));
   const { data: mintPrice } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintPrice", query: { enabled: true } });
   const { data: tokenPrice } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "tokenPrice", query: { enabled: true } });
   const { data: allow } = useReadContract({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "allowance", args: [address ?? "0x0", OMD_ADDR as `0x${string}`], query: { enabled: !!address } });
