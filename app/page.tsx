@@ -81,7 +81,7 @@ export default function Page() {
         const need = (tokenPrice as bigint ?? 0n) * BigInt(qty);
         if ((allow as bigint ?? 0n) < need) {
           setMsg("APPROVING $DEGEN...");
-          await writeContractAsync({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [OMD_ADDR as `0x${string}`, 2n ** 256n - 1n] });
+          await writeContractAsync({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [OMD_ADDR as `0x${string}`, BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")] });
           setMsg("APPROVED. MINTING...");
         }
         await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintWithToken", args: [BigInt(qty)] });
