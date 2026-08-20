@@ -7,7 +7,6 @@ export const CHAIN = {
 } as any;
 
 // One Million Degens — deployed on Robinhood Chain.
-// v1 active (back to original setup, 20 Aug 2026). v2 relaunch attempt retired: 0x70FB502FFDc4a0e795FB34332bDeC29A248218FD.
 export const OMD_ADDR = "0x0fE635f441829B7BfA5D2B3a44344caAe367d38F";
 
 // $DEGEN token — deployed by owner.
