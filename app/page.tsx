@@ -134,7 +134,7 @@ export default function Page() {
           <div className="hero-stats">
             <div className="hstat"><div className="l">SUPPLY</div><div className="v">1,000,000</div></div>
             <div className="hstat"><div className="l">MINTED</div><div className="v">{minted !== undefined ? minted.toString() : "0"}</div></div>
-            <div className="hstat"><div className="l">MINT PRICE</div><div className="v">{priceEth > 0 ? tokenPriceNum.toLocaleString("en-US") + " $DEGEN" : "FREE"}</div></div>
+            <div className="hstat"><div className="l">MINT PRICE</div><div className="v">{tokenPriceNum.toLocaleString("en-US") + " $DEGEN"}</div></div>
             <div className="hstat"><div className="l">BURNED</div><div className="v">{burned !== undefined ? Number(formatUnits(burned as bigint, 18)).toLocaleString("en-US") + " $DEGEN" : "0 $DEGEN"}</div></div>
           </div>
           <div className="scroll-hint">PRESS DOWN TO START ▾</div>
