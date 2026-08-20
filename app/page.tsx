@@ -88,24 +88,28 @@ export default function Page() {
   return (
     <>
       <nav>
-        <div className="logo" onClick={() => goTo("hero")} style={{ cursor: "pointer" }}>
-          <div className="logo-pix"><img src="/degen_7.png" alt="" /></div>
-          <div>OM DEGENS</div>
+        <div className="nav-top">
+          <div className="logo" onClick={() => goTo("hero")} style={{ cursor: "pointer" }}>
+            <div className="logo-pix"><img src="/degen_7.png" alt="" /></div>
+            <div>OM DEGENS</div>
+          </div>
+          <div className="nav-icons">
+            <a title="X" href="https://x.com/OneMilliondegen" target="_blank" rel="noopener"><img src="/x_logo.jpg" alt="X" style={{ width: 18, height: 18, verticalAlign: "middle", borderRadius: 4 }} /></a>
+            <a title="OPENSEA" href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener"><img src="/opensea.png" alt="OPENSEA" style={{ width: 18, height: 18, verticalAlign: "middle" }} /></a>
+            <div className="nav-conn">
+              {displayAddress ? (
+                <span className="wallet-chip" onClick={() => goTo("mintsection")} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)}</span>
+              ) : (
+                <button className="connect-btn" onClick={doConnect}>CONNECT WALLET</button>
+              )}
+            </div>
+          </div>
         </div>
         <div className="links">
-          <a title="X" href="https://x.com/OneMilliondegen" target="_blank" rel="noopener"><img src="/x_logo.jpg" alt="X" style={{ width: 18, height: 18, verticalAlign: "middle", borderRadius: 4 }} /></a>
-          <a title="OPENSEA" href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener"><img src="/opensea.png" alt="OPENSEA" style={{ width: 18, height: 18, verticalAlign: "middle" }} /></a>
           <a onClick={() => goTo("mintsection")}>MINT</a>
           <a onClick={() => goTo("gallery")}>CHARACTERS</a>
           <a onClick={() => goTo("rarity")}>RARITY</a>
           <a onClick={() => goTo("story")}>STORY</a>
-        </div>
-        <div className="nav-conn">
-          {displayAddress ? (
-            <span className="wallet-chip" onClick={() => goTo("mintsection")} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)}</span>
-          ) : (
-            <button className="connect-btn" onClick={doConnect}>CONNECT WALLET</button>
-          )}
         </div>
       </nav>
 
