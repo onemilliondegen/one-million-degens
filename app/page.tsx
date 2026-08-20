@@ -223,12 +223,7 @@ export default function Page() {
       </section>
 
       <section id="story" className="wrap">
-        <h2 className="sec-title">HOW TO PLAY</h2>
-        <div className="steps">
-          <div className="step"><div className="step-n">1</div><p><b>CONNECT</b><br />Pick your wallet. Every mint burns $DEGEN.</p></div>
-          <div className="step"><div className="step-n">2</div><p><b>MINT</b><br />5,000 $DEGEN burned. Up to 100 in one tx.</p></div>
-          <div className="step"><div className="step-n">3</div><p><b>IT'S YOURS</b><br />Random token id from 1 to 1,000,000. Revealed instantly.</p></div>
-        </div>
+        <h2 className="sec-title">STORY</h2>
         <div className="story-txt">
           <p>
             One pen. One green. <b>One million faces.</b><br /><br />
