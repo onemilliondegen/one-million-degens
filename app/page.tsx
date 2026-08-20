@@ -187,11 +187,11 @@ export default function Page() {
 
               <div className="limit-box">
                 <div className="t">$DEGEN TOKEN CA</div>
-                <div className="ca">0x0000000000000000000000000000000000000000</div>
+                <div className="ca">0x9e76886e9e6BCc808472151Cb99F9919e237997f</div>
                 <div className="ca-sep"></div>
                 <div className="t" style={{ marginTop: 10 }}>OPENSEA</div>
                 <a href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener" style={{ cursor: "pointer", textDecoration: "none", color: "var(--green)", fontWeight: 900, letterSpacing: 2, fontSize: 12 }}>COLLECTION PAGE ▸</a>
-                <p style={{ marginTop: 8, opacity: 0.6 }}>TOKEN ADDRESS POSTED AFTER DEPLOY.</p>
+                <p style={{ marginTop: 8, opacity: 0.6 }}>MINT BY BURNING $DEGEN.</p>
               </div>
 
               <div className="limit-box">
