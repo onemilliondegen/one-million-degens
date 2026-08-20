@@ -78,8 +78,8 @@ export default function Page() {
         await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mint", args: [BigInt(qty)], value: parseEther((priceEth * qty).toString()) });
         setMsg("MINTED " + qty + " DEGENS. WELCOME TO THE GREEN.");
       } else {
-        const need = (tokenPrice as bigint ?? 0n) * BigInt(qty);
-        if ((allow as bigint ?? 0n) < need) {
+        const need = (tokenPrice as bigint ?? BigInt(0)) * BigInt(qty);
+        if ((allow as bigint ?? BigInt(0)) < need) {
           setMsg("APPROVING $DEGEN...");
           await writeContractAsync({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [OMD_ADDR as `0x${string}`, BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")] });
           setMsg("APPROVED. MINTING...");
