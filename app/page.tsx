@@ -226,11 +226,13 @@ export default function Page() {
         <h2 className="sec-title">STORY</h2>
         <div className="story-txt">
           <p>
-            One pen. One green. <b>One million faces.</b><br /><br />
-            The first and only <b>1,000,000 NFT</b> collection on <b>Robinhood Chain</b>.<br /><br />
-            No utility. No whitelist. No TG. No DC.<br /><b>YES $DEGEN BURN.</b><br /><br />
-            Every degen is a single <b>9x9 pixel</b>, stamped black on the green ledger.<br /><br />
-            No roadmaps. No promises.<br />The degens control everything. <b>ONE MILLION DEGENS.</b>
+            One pen. One green. <b>One million faces.</b><br />
+            The first and only <b>1,000,000 NFT</b> collection on <b>Robinhood Chain</b>.<br />
+            No utility. No whitelist. No TG. No DC. <b>No forced royalty.</b><br />
+            <b>YES $DEGEN BURN.</b><br />
+            Every degen is a single <b>9x9 pixel</b>, stamped black on the green ledger.<br />
+            No roadmaps. No promises.<br />
+            The degens control everything. <b>ONE MILLION DEGENS.</b>
           </p>
         </div>
       </section>
