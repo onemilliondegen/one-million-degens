@@ -32,6 +32,8 @@ export function useOmd() {
   const { data: mintPrice } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintPrice", query: { enabled: true } });
   const { data: tokenPrice } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "tokenPrice", query: { enabled: true } });
   const { data: allow } = useReadContract({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "allowance", args: [address ?? "0x0", OMD_ADDR as `0x${string}`], query: { enabled: !!address } });
+  const { data: perWalletLimit } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "perWalletLimit", query: { enabled: true } });
+  const { data: walletMinted } = useReadContract({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintedByWallet", args: [address ?? "0x0"], query: { enabled: !!address, refetchInterval: 8000 } });
 
-  return { address, connect, connectors, disconnect, bal, minted, burned, mintPrice, tokenPrice, allow };
+  return { address, connect, connectors, disconnect, bal, minted, burned, mintPrice, tokenPrice, allow, perWalletLimit, walletMinted };
 }

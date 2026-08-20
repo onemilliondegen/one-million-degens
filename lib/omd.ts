@@ -20,6 +20,7 @@ export const OMD_ABI = [
   { inputs: [], name: "minted", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "totalBurned", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "perWalletLimit", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
+  { inputs: [{ name: "account", type: "address" }], name: "mintedByWallet", outputs: [{ name: "", type: "uint256" }], stateMutability: "view", type: "function" },
   { inputs: [], name: "paused", outputs: [{ name: "", type: "bool" }], stateMutability: "view", type: "function" },
   { inputs: [{ name: "qty", type: "uint256" }], name: "mint", outputs: [], stateMutability: "payable", type: "function" },
   { inputs: [{ name: "qty", type: "uint256" }], name: "mintWithToken", outputs: [], stateMutability: "nonpayable", type: "function" },

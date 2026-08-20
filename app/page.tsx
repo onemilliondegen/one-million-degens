@@ -31,7 +31,7 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow } = useOmd();
+  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow, perWalletLimit, walletMinted } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
@@ -53,7 +53,11 @@ export default function Page() {
   };
 
   const mintedNum = minted !== undefined ? Number(minted) : 0;
-  const maxQty = Math.min(MAX_TX, SUPPLY - mintedNum);
+  const walletMintedNum = walletMinted !== undefined ? Number(walletMinted) : 0;
+  const limit = perWalletLimit !== undefined ? Number(perWalletLimit) : MAX_TX;
+  const remaining = Math.max(0, limit - walletMintedNum);
+  const limitReached = address ? walletMintedNum >= limit : false;
+  const maxQty = Math.min(MAX_TX, SUPPLY - mintedNum, remaining > 0 ? remaining : MAX_TX);
   const priceEth = mintPrice !== undefined ? Number(formatUnits(mintPrice as bigint, 18)) : 0;
   const tokenPriceNum = tokenPrice !== undefined ? Number(formatUnits(tokenPrice as bigint, 18)) : Number(PRICE_TOKEN);
   const total = pay === "eth"
@@ -165,7 +169,7 @@ export default function Page() {
                     const v = Math.floor(Number(e.target.value));
                     setQty(isNaN(v) || v < 1 ? 1 : Math.min(v, maxQty));
                   }}
-                /><small className="qty-max">MAX {maxQty} PER MINT</small>
+                /><small className="qty-max">{address ? walletMintedNum + " / " + limit + " MINTED · " + remaining + " LEFT" : "MAX " + limit + " PER WALLET"}</small>
                 <button className="qty-btn" disabled={qty >= maxQty} onClick={() => setQty(qty + 1)}>+</button>
                 <button className="qty-btn" style={{ width: 56, fontSize: 12 }} onClick={() => setQty(maxQty)}>MAX</button>
               </div>
@@ -177,8 +181,8 @@ export default function Page() {
 
               <div className="total">{total}<small>TOTAL · ONE TX · ALL AT ONCE</small></div>
 
-              <button className="mint-btn" disabled={!LIVE} onClick={mintNow}>
-                {!LIVE ? "GAME NOT STARTED" : displayAddress ? "MINT NOW ▸" : "CONNECT WALLET"}
+              <button className="mint-btn" disabled={!LIVE || limitReached} onClick={mintNow}>
+                {limitReached ? "LIMIT REACHED" : !LIVE ? "GAME NOT STARTED" : displayAddress ? "MINT NOW ▸" : "CONNECT WALLET"}
               </button>
 
               <p className="msg">{msg}</p>
