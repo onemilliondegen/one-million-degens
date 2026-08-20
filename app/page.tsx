@@ -31,7 +31,7 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow, perWalletLimit, walletMinted } = useOmd();
+  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow, perWalletLimit, walletMinted, degenBal } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
@@ -64,19 +64,42 @@ export default function Page() {
     ? (priceEth > 0 ? (priceEth * qty).toFixed(5) + " ETH" : "FREE")
     : (tokenPriceNum * qty).toLocaleString("en-US") + " $DEGEN";
 
+  const ensureChain = async () => {
+    try { await switchChainAsync({ chainId: 4663 }); return true; }
+    catch {
+      try {
+        const eth = (window as unknown as { ethereum?: { request: (a: object) => Promise<unknown> } }).ethereum;
+        if (eth?.request) {
+          await eth.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: "0x1237",
+              chainName: "Robinhood Chain",
+              nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
+              rpcUrls: ["https://rpc.mainnet.chain.robinhood.com"],
+              blockExplorerUrls: [] as string[],
+            }],
+          });
+          await switchChainAsync({ chainId: 4663 });
+          return true;
+        }
+      } catch { /* user rejected */ }
+      return false;
+    }
+  };
+
   const doConnect = async () => {
     try {
       connect({ connector: connectors[0] });
       setMsg("CONNECT YOUR WALLET.");
     } catch { setMsg("NO WALLET FOUND."); }
-    try { await switchChainAsync({ chainId: 4663 }); } catch { /* already on chain */ }
+    if (!(await ensureChain())) setMsg("SWITCH TO ROBINHOOD CHAIN.");
   };
 
   const mintNow = async () => {
     if (!address) { await doConnect(); return; }
     setMsg("");
-    try { await switchChainAsync({ chainId: 4663 }); }
-    catch { setMsg("SWITCH TO ROBINHOOD CHAIN."); return; }
+    if (!(await ensureChain())) { setMsg("SWITCH TO ROBINHOOD CHAIN."); return; }
     try {
       if (pay === "eth") {
         await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mint", args: [BigInt(qty)], value: parseEther((priceEth * qty).toString()) });
