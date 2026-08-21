@@ -140,7 +140,7 @@ export default function Page() {
             <div className="hero-tag">9x9 PIXEL</div>
           </div>
           <button className="coin-btn" onClick={() => goTo("mintsection")}>
-            <span className="coin-blink">▸</span> MINT IS LIVE <span className="coin-blink">▸</span>
+            <span className="coin-blink">▸</span> MINT NOW <span className="coin-blink">▸</span>
           </button>
           <div className="hero-stats">
             <div className="hstat"><div className="l">SUPPLY</div><div className="v">1,000,000</div></div>
