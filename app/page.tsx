@@ -30,7 +30,7 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, minted, mintPrice, perWalletLimit, walletMinted } = useOmd();
+  const { address, connect, connectors, disconnect, minted, mintPrice, perWalletLimit, walletMinted } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
@@ -116,7 +116,7 @@ export default function Page() {
             <a title="OPENSEA" href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener"><img src="/opensea.png" alt="OPENSEA" style={{ width: 18, height: 18, verticalAlign: "middle" }} /></a>
             <div className="nav-conn">
               {displayAddress ? (
-                <span className="wallet-chip" onClick={() => goTo("mintsection")} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)}</span>
+                <span className="wallet-chip" onClick={() => disconnect()} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)} ✕</span>
               ) : (
                 <button className="connect-btn" onClick={doConnect}>CONNECT WALLET</button>
               )}
