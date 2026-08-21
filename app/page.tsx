@@ -37,13 +37,19 @@ export default function Page() {
   const [heroIdx, setHeroIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [msg, setMsg] = useState("");
-  const [showDisconnect, setShowDisconnect] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const { writeContractAsync } = useWriteContract();
   const { switchChainAsync } = useSwitchChain();
 
   useEffect(() => {
     const t = setInterval(() => setHeroIdx((v) => (v + 1) % HERO_IMGS.length), 900);
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    const close = () => setShowMenu(false);
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
   }, []);
 
   const goTo = (id: string) => {
@@ -117,7 +123,16 @@ export default function Page() {
             <a title="OPENSEA" href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener"><img src="/opensea.png" alt="OPENSEA" style={{ width: 18, height: 18, verticalAlign: "middle" }} /></a>
             <div className="nav-conn">
               {displayAddress ? (
-                <span className="wallet-chip" onClick={() => { if (showDisconnect) { disconnect(); setShowDisconnect(false); } else { setShowDisconnect(true); } }} onMouseLeave={() => setShowDisconnect(false)} style={{ cursor: "pointer" }}>{showDisconnect ? "DISCONNECT" : displayAddress.slice(0, 6) + "..." + displayAddress.slice(-4)}</span>
+                <div className="wc-wrap">
+                  <span className="wallet-chip" onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); }} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)} ▾</span>
+                  {showMenu && (
+                    <div className="wallet-menu">
+                      <div className="wm-addr">{displayAddress}</div>
+                      <button className="wm-btn" onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(displayAddress); }}>COPY ADDRESS</button>
+                      <button className="wm-btn wm-danger" onClick={(e) => { e.stopPropagation(); disconnect(); setShowMenu(false); }}>DISCONNECT</button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <button className="connect-btn" onClick={doConnect}>CONNECT WALLET</button>
               )}

@@ -57,6 +57,13 @@ nav {
 .nav-top { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; }
 .nav-icons { display: flex; align-items: center; gap: 12px; }
 .nav-conn { display: flex; align-items: center; }
+.wc-wrap { position: relative; display: flex; align-items: center; }
+.wallet-menu { position: absolute; top: calc(100% + 10px); right: 0; z-index: 300; background: var(--ink); border: 3px solid var(--green); box-shadow: 6px 6px 0 var(--green-dark); padding: 10px; min-width: 240px; display: flex; flex-direction: column; gap: 8px; }
+.wm-addr { font-size: 10px; letter-spacing: 1px; word-break: break-all; color: var(--green); opacity: 0.9; }
+.wm-btn { background: var(--green); color: var(--ink); border: none; padding: 9px; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+.wm-btn:hover { background: var(--ink); color: var(--green); outline: 2px solid var(--green); }
+.wm-danger { background: #d00040; color: #fff; }
+.wm-danger:hover { background: var(--ink); color: #ff4d6d; outline: 2px solid #ff4d6d; }
 
 nav .logo { display: flex; align-items: center; gap: 10px; color: var(--green); font-size: 16px; font-weight: 700; letter-spacing: 1px; }
 .logo-pix { width: 36px; height: 36px; border: 3px solid var(--green); background: var(--green); box-shadow: 3px 3px 0 var(--green-dark); display: grid; place-items: center; }
