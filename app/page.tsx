@@ -87,7 +87,7 @@ export default function Page() {
   const doConnect = async () => {
     try {
       connect({ connector: connectors[0] });
-      setMsg("CONNECT YOUR WALLET.");
+      setMsg("CONNECT WALLET.");
     } catch { setMsg("NO WALLET FOUND."); }
     if (!(await ensureChain())) setMsg("SWITCH TO ROBINHOOD CHAIN.");
   };
