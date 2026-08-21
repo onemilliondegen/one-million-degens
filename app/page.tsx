@@ -30,7 +30,7 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, disconnect, minted, mintPrice, perWalletLimit, walletMinted } = useOmd();
+  const { address, open, disconnect, minted, mintPrice, perWalletLimit, walletMinted } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
@@ -86,7 +86,7 @@ export default function Page() {
 
   const doConnect = async () => {
     try {
-      connect({ connector: connectors[0] });
+      open();
       setMsg("CONNECT WALLET.");
     } catch { setMsg("NO WALLET FOUND."); }
     if (!(await ensureChain())) setMsg("SWITCH TO ROBINHOOD CHAIN.");
