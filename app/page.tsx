@@ -37,6 +37,7 @@ export default function Page() {
   const [heroIdx, setHeroIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [msg, setMsg] = useState("");
+  const [showDisconnect, setShowDisconnect] = useState(false);
   const { writeContractAsync } = useWriteContract();
   const { switchChainAsync } = useSwitchChain();
 
@@ -116,7 +117,7 @@ export default function Page() {
             <a title="OPENSEA" href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener"><img src="/opensea.png" alt="OPENSEA" style={{ width: 18, height: 18, verticalAlign: "middle" }} /></a>
             <div className="nav-conn">
               {displayAddress ? (
-                <span className="wallet-chip" onClick={() => disconnect()} style={{ cursor: "pointer" }}>{displayAddress.slice(0, 6)}...{displayAddress.slice(-4)} ✕</span>
+                <span className="wallet-chip" onClick={() => { if (showDisconnect) { disconnect(); setShowDisconnect(false); } else { setShowDisconnect(true); } }} onMouseLeave={() => setShowDisconnect(false)} style={{ cursor: "pointer" }}>{showDisconnect ? "DISCONNECT" : displayAddress.slice(0, 6) + "..." + displayAddress.slice(-4)}</span>
               ) : (
                 <button className="connect-btn" onClick={doConnect}>CONNECT WALLET</button>
               )}
