@@ -153,10 +153,6 @@ export default function Page() {
 
       <section id="mintsection" className="screen-mint" style={{ borderTop: "6px solid var(--ink)" }}>
         <div className="wrap">
-          <div className="scores">
-            <div className="score"><div className="l">SCORE // MINTED</div><div className="v">{minted !== undefined ? minted.toString() : "0"} <em>/ 1,000,000</em></div></div>
-          </div>
-
           <div className="mint-grid">
             <div className="machine">
               <div className="machine-top">
@@ -165,6 +161,10 @@ export default function Page() {
                   <img src={HERO_IMGS[heroIdx]} alt="" />
                 </div>
                 <div className="machine-sub">RANDOM DEGEN · TOKEN 1-1,000,000</div>
+              </div>
+
+              <div className="scores">
+                <div className="score"><div className="l">SCORE // MINTED</div><div className="v">{minted !== undefined ? minted.toString() : "0"} <em>/ 1,000,000</em></div></div>
               </div>
 
               <div className="qty-row">
@@ -188,18 +188,6 @@ export default function Page() {
               <p className="msg">{msg}</p>
 
               <a href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener" className="os-link">VIEW ON OPENSEA ▸</a>
-            </div>
-
-            <div className="side">
-              <div className="limit-box">
-                <div className="t">OPENSEA</div>
-                <a href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener" style={{ cursor: "pointer", textDecoration: "none", color: "var(--green)", fontWeight: 900, letterSpacing: 2, fontSize: 12 }}>COLLECTION PAGE ▸</a>
-              </div>
-
-              <div className="limit-box">
-                <div className="t">THE GREEN RULES</div>
-                <div className="rules">NO WL · NO UTILITY · NO TG · NO DC</div>
-              </div>
             </div>
           </div>
         </div>
