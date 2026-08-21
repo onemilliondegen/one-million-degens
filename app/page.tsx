@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useOmd } from "../lib/useOmd";
-import { OMD_ADDR, DEGEN_ADDR, OMD_ABI, ERC20_ABI, LIVE } from "../lib/omd";
+import { OMD_ADDR, OMD_ABI, LIVE } from "../lib/omd";
 import { useWriteContract, useSwitchChain } from "wagmi";
 import { parseEther, formatUnits } from "viem";
 
 const HERO_IMGS = ["/degen_777777.png", "/degen_424242.png", "/degen_1337.png", "/degen_15.png", "/degen_28.png", "/degen_41.png", "/degen_7.png"];
 const GALLERY = ["/degen_12.png", "/degen_25.png", "/degen_14.png", "/degen_15.png", "/degen_28.png", "/degen_41.png", "/degen_18.png", "/degen_31.png", "/degen_20.png", "/degen_21.png", "/degen_22.png", "/degen_35.png"];
-const PRICE_TOKEN = "5000";
 const SUPPLY = 1_000_000;
 
-const TICKER = ["ONE MILLION DEGENS", "YES BURN", "WEN MINT?", "NO UTILITY", "NO WL", "WEN LAMBO?", "9x9 PIXELS"];
+const TICKER = ["ONE MILLION DEGENS", "WEN MINT?", "NO UTILITY", "NO WL", "WEN LAMBO?", "9x9 PIXELS"];
 
 const RARITY = [
   ["WHALE", "1", "~2,762"],
@@ -31,13 +30,12 @@ const RARITY = [
 const MAX_TX = 100;
 
 export default function Page() {
-  const { address, connect, connectors, minted, burned, mintPrice, tokenPrice, allow, perWalletLimit, walletMinted, degenBal } = useOmd();
+  const { address, connect, connectors, minted, mintPrice, perWalletLimit, walletMinted } = useOmd();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const displayAddress = mounted ? address : undefined;
   const [heroIdx, setHeroIdx] = useState(0);
   const [qty, setQty] = useState(1);
-  const [pay, setPay] = useState<"eth" | "token">("token");
   const [msg, setMsg] = useState("");
   const { writeContractAsync } = useWriteContract();
   const { switchChainAsync } = useSwitchChain();
@@ -59,10 +57,7 @@ export default function Page() {
   const limitReached = address ? walletMintedNum >= limit : false;
   const maxQty = Math.min(MAX_TX, SUPPLY - mintedNum, remaining > 0 ? remaining : MAX_TX);
   const priceEth = mintPrice !== undefined ? Number(formatUnits(mintPrice as bigint, 18)) : 0;
-  const tokenPriceNum = tokenPrice !== undefined ? Number(formatUnits(tokenPrice as bigint, 18)) : Number(PRICE_TOKEN);
-  const total = pay === "eth"
-    ? (priceEth > 0 ? (priceEth * qty).toFixed(5) + " ETH" : "FREE")
-    : (tokenPriceNum * qty).toLocaleString("en-US") + " $DEGEN";
+  const total = priceEth > 0 ? (priceEth * qty).toFixed(5) + " ETH" : "FREE";
 
   const ensureChain = async () => {
     try { await switchChainAsync({ chainId: 4663 }); return true; }
@@ -101,19 +96,8 @@ export default function Page() {
     setMsg("");
     if (!(await ensureChain())) { setMsg("SWITCH TO ROBINHOOD CHAIN."); return; }
     try {
-      if (pay === "eth") {
-        await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mint", args: [BigInt(qty)], value: parseEther((priceEth * qty).toString()) });
-        setMsg("MINTED " + qty + " DEGENS. WELCOME TO THE GREEN.");
-      } else {
-        const need = (tokenPrice as bigint ?? BigInt(0)) * BigInt(qty);
-        if ((allow as bigint ?? BigInt(0)) < need) {
-          setMsg("APPROVING $DEGEN...");
-          await writeContractAsync({ address: DEGEN_ADDR as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [OMD_ADDR as `0x${string}`, BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")] });
-          setMsg("APPROVED. MINTING...");
-        }
-        await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mintWithToken", args: [BigInt(qty)] });
-        setMsg(qty + " DEGENS MINTED. TOKENS BURNED.");
-      }
+      await writeContractAsync({ address: OMD_ADDR as `0x${string}`, abi: OMD_ABI, functionName: "mint", args: [BigInt(qty)], value: parseEther((priceEth * qty).toString()) });
+      setMsg("MINTED " + qty + " DEGENS. WELCOME TO THE GREEN.");
     } catch (e) {
       setMsg("MINT FAILED: " + String((e as { message?: string })?.message || e).slice(0, 60));
     }
@@ -161,8 +145,7 @@ export default function Page() {
           <div className="hero-stats">
             <div className="hstat"><div className="l">SUPPLY</div><div className="v">1,000,000</div></div>
             <div className="hstat"><div className="l">MINTED</div><div className="v">{minted !== undefined ? minted.toString() : "0"}</div></div>
-            <div className="hstat"><div className="l">MINT PRICE</div><div className="v">{tokenPriceNum.toLocaleString("en-US") + " $DEGEN"}</div></div>
-            <div className="hstat"><div className="l">BURNED</div><div className="v">{burned !== undefined ? Number(formatUnits(burned as bigint, 18)).toLocaleString("en-US") + " $DEGEN" : "0 $DEGEN"}</div></div>
+            <div className="hstat"><div className="l">MINT PRICE</div><div className="v">{priceEth > 0 ? priceEth.toString() + " ETH" : "FREE"}</div></div>
           </div>
           <div className="scroll-hint">PRESS DOWN TO START ▾</div>
         </div>
@@ -172,7 +155,6 @@ export default function Page() {
         <div className="wrap">
           <div className="scores">
             <div className="score"><div className="l">SCORE // MINTED</div><div className="v">{minted !== undefined ? minted.toString() : "0"} <em>/ 1,000,000</em></div></div>
-            <div className="score burn"><div className="l">SCORE // $DEGEN BURNED</div><div className="v">{burned !== undefined ? Number(formatUnits(burned as bigint, 18)).toLocaleString("en-US") : "0"}</div></div>
           </div>
 
           <div className="mint-grid">
@@ -197,11 +179,6 @@ export default function Page() {
                 <button className="qty-btn" style={{ width: 56, fontSize: 12 }} onClick={() => setQty(maxQty)}>MAX</button>
               </div>
 
-              <div className="pay-row">
-                <button className={"pay-btn" + (pay === "token" ? " on" : "")} onClick={() => setPay("token")}>PAY $DEGEN</button>
-                <button className={"pay-btn" + (pay === "eth" ? " on" : "")} onClick={() => setPay("eth")}>PAY ETH</button>
-              </div>
-
               <div className="total">{total}<small>TOTAL · ONE TX · ALL AT ONCE</small></div>
 
               <button className="mint-btn" disabled={!LIVE || limitReached} onClick={mintNow}>
@@ -214,24 +191,14 @@ export default function Page() {
             </div>
 
             <div className="side">
-              <div className="burn-box">
-                <div className="t">MINT WITH $DEGEN = BURN</div>
-                <div className="b">5,000 $DEGEN → 0xdEaD</div>
-                <p>Every $DEGEN used for minting goes straight to <code>0x0000...dEaD</code>, burned forever. ETH mints don't burn anything; the ETH goes to the treasury.</p>
-              </div>
-
               <div className="limit-box">
-                <div className="t">$DEGEN TOKEN CA</div>
-                <div className="ca">0x9e76886e9e6BCc808472151Cb99F9919e237997f</div>
-                <div className="ca-sep"></div>
-                <div className="t" style={{ marginTop: 10 }}>OPENSEA</div>
+                <div className="t">OPENSEA</div>
                 <a href="https://opensea.io/collection/one-million-degens" target="_blank" rel="noopener" style={{ cursor: "pointer", textDecoration: "none", color: "var(--green)", fontWeight: 900, letterSpacing: 2, fontSize: 12 }}>COLLECTION PAGE ▸</a>
-                <p style={{ marginTop: 8, opacity: 0.6 }}>MINT BY BURNING $DEGEN.</p>
               </div>
 
               <div className="limit-box">
                 <div className="t">THE GREEN RULES</div>
-                <div className="rules">NO WL · NO UTILITY · NO TG · NO DC<br /><b>YES BURN.</b></div>
+                <div className="rules">NO WL · NO UTILITY · NO TG · NO DC</div>
               </div>
             </div>
           </div>
@@ -268,7 +235,6 @@ export default function Page() {
             One pen. One green. <b>One million faces.</b><br />
             The first and only <b>1,000,000 NFT</b> collection on <b>Robinhood Chain</b>.<br />
             No utility. No whitelist. No TG. No DC. <b>No forced royalty.</b><br />
-            <b>YES $DEGEN BURN.</b><br />
             Every degen is a single <b>9x9 pixel</b>, stamped black on the green ledger.<br />
             No roadmaps. No promises.<br />
             The degens control everything. <b>ONE MILLION DEGENS.</b>
