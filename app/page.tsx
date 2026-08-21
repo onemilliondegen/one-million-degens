@@ -47,10 +47,11 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    if (!showMenu) return;
     const close = () => setShowMenu(false);
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
-  }, []);
+  }, [showMenu]);
 
   const goTo = (id: string) => {
     const el = document.getElementById(id);
